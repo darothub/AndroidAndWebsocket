@@ -16,6 +16,21 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+            def tmpFilePath = System.getProperty("user.home") + "/work/_temp/keystore/"
+            def allFilesFromDir = new File(tmpFilePath).listFiles()
+            if (allFilesFromDir != null) {
+                def keystoreFile = allFilesFromDir.first()
+                keystoreFile.renameTo("keystore/androidwebsocket.jks")
+            }
+
+            storeFile = file("keystore/androidwebsocket.jks")
+            storePassword System.getenv("SIGNING_STORE_PASSWORD")
+            keyAlias System.getenv("SIGNING_KEY_ALIAS")
+            keyPassword System.getenv("SIGNING_KEY_PASSWORD")
+        }
+    }
 
     buildTypes {
         release {
@@ -31,6 +46,8 @@ android {
         jvmTarget = '1.8'
     }
 }
+
+task sample { project.logger.lifecycle('my info message') }
 
 dependencies {
 
